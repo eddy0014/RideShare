@@ -5,6 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.example.eddy.rideshare.activity.RidePosting;
+import com.example.eddy.rideshare.fragment.PhotosFragment;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -16,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 /**
  * Created by e-sal on 4/5/2017.
@@ -41,6 +45,7 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
         String postRideURL = "http://sandblaster44.000webhostapp.com/postRide.php";
         String getListingsURL = "http://sandblaster44.000webhostapp.com/getListings.php";
         String method = params[0];
+        ArrayList<RidePosting> rideListings = new ArrayList<RidePosting>();
 
         if(method.equals("postRide")) {
             String origin = params[1];
@@ -92,13 +97,21 @@ public class BackgroundTask extends AsyncTask<String, Void, String> {
                     String row = line;
                     response = line;
                     String[] parts = row.split("@");
+                    RidePosting ride = new RidePosting();
                     String origin = parts[0];
                     String destination = parts[1];
                     String departingTime = parts[2];
+                    ride.setOrigin(origin);
+                    ride.setDestination(destination);
+                    ride.setDepartingTime(departingTime);
+                    rideListings.add(ride);
                 }
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
+
+                PhotosFragment test = new PhotosFragment();
+                test.setListingsView(rideListings);
 
                 return response;
             } catch (MalformedURLException e) {

@@ -6,15 +6,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.eddy.rideshare.R;
 import com.example.eddy.rideshare.BackgroundTask;
 import com.example.eddy.rideshare.activity.PostListing;
 
 import com.example.eddy.rideshare.BackgroundTask;
+import com.example.eddy.rideshare.activity.RidePosting;
+import com.example.eddy.rideshare.activity.RidePostingAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +37,11 @@ public class PhotosFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final String TAG = "PHOTOS_MESSAGE";
+
+    private ArrayList<RidePosting> ridePostings;
+    private ListView listingsView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,6 +83,7 @@ public class PhotosFragment extends Fragment {
         String method = "getListings";
         BackgroundTask backgroundTask = new BackgroundTask(PhotosFragment.this.getActivity());
         backgroundTask.execute(method);
+        Toast.makeText(PhotosFragment.this.getContext(), "Retrieving listings...", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -88,7 +102,14 @@ public class PhotosFragment extends Fragment {
             }
         });
 
+        listingsView = (ListView) v.findViewById(R.id.listingsList);
+
         return v;
+    }
+
+    public void setListingsView(ArrayList<RidePosting> rideListings) {
+        RidePostingAdapter adapter = new RidePostingAdapter(PhotosFragment.this.getContext(), rideListings);
+        listingsView.setAdapter(adapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
