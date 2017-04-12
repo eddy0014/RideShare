@@ -108,7 +108,7 @@ public class PhotosFragment extends Fragment {
     }
 
     public void setListingsView(ArrayList<RidePosting> rideListings) {
-        RidePostingAdapter adapter = new RidePostingAdapter(PhotosFragment.this.getContext(), rideListings);
+        RidePostingAdapter adapter = new RidePostingAdapter(getActivity(), rideListings);
         listingsView.setAdapter(adapter);
     }
 
